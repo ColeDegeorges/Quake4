@@ -327,7 +327,7 @@ void idProjectile::FreeLightDef( void ) {
 idProjectile::Launch
 =================
 */
-void idProjectile::Launch( const idVec3 &start, const idVec3 &dir, const idVec3 &pushVelocity, const float timeSinceFire, const float dmgPower ) {
+void idProjectile::Launch( const idVec3 &start, const idVec3 &dir, const idVec3 &pushVelocity, const float timeSinceFire, const float dmgPower, idStr monst ) {
 	float			fuse;
 	idVec3			velocity;
 	float			linear_friction;
@@ -348,9 +348,9 @@ void idProjectile::Launch( const idVec3 &start, const idVec3 &dir, const idVec3 
  	} else {
  		cinematic = false;
  	} 
-
+	monster = monst;
 	// Set the damage
-	damagePower = dmgPower;
+	damagePower = 0;  // dmgPower;
 
 	if ( !spawnArgs.GetFloat( "speed", "0", temp ) ) {
 		spawnArgs.GetVector( "velocity", "0 0 0", tmp );
@@ -384,7 +384,7 @@ void idProjectile::Launch( const idVec3 &start, const idVec3 &dir, const idVec3 
 	mass				= spawnArgs.GetFloat( "mass" );
 	gravity				= spawnArgs.GetFloat( "gravity" );
 	fuse				= spawnArgs.GetFloat( "fuse" ) + ( spawnArgs.GetFloat( "fuse_random", "0" ) * gameLocal.random.RandomFloat() );
-	bounceCount			= spawnArgs.GetInt( "bounce_count", "-1" );
+	bounceCount = 0; // spawnArgs.GetInt("bounce_count", "-1");
 	
 	//spawn impact entity information
 	impactEntity				= spawnArgs.GetString("def_impactEntity","");
@@ -528,6 +528,23 @@ void idProjectile::Launch( const idVec3 &start, const idVec3 &dir, const idVec3 
 }
 
 /*
+=============
+spawn monster
+=============
+*/
+
+void idProjectile::SpawnMonster() {
+	idDict dict;
+	dict.Set("classname", monster.c_str());
+	dict.Set("origin", (physicsObj.GetOrigin()).ToString());
+	dict.SetFloat("angle", (physicsObj.GetAxis()).ToAngles()[YAW]);
+	dict.SetInt("networkSync", 1);
+	if (!gameLocal.SpawnEntityDef(monster.c_str(), &dict)) {
+		gameLocal.Printf("Spawn failed :( \n");
+	}
+}
+
+/*
 ================
 idProjectile::Think
 ================
@@ -651,6 +668,9 @@ bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity, bo
  	bool		canDamage;
  	
  	hitTeleporter = false;
+	if (collision.c.material) {
+		SpawnMonster();
+	}
 
 	if ( state == EXPLODED || state == FIZZLED || ( state == IMPACTED && predictedProjectiles ) ) {
 		return true;

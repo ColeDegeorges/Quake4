@@ -2499,13 +2499,12 @@ void rvWeapon::AddToClip ( int amount ) {
 
 ***********************************************************************/
 
-
 /*
 ================
 rvWeapon::Attack
 ================
 */
-void rvWeapon::Attack( bool altAttack, int num_attacks, float spread, float fuseOffset, float power ) {
+void rvWeapon::Attack( bool altAttack, int num_attacks, float spread, float fuseOffset, float power) {
 	idVec3 muzzleOrigin;
 	idMat3 muzzleAxis;
 	
@@ -2597,7 +2596,8 @@ void rvWeapon::Attack( bool altAttack, int num_attacks, float spread, float fuse
 		idDict& dict = altAttack ? attackAltDict : attackDict;
 		power *= owner->PowerUpModifier( PMOD_PROJECTILE_DAMAGE );
 		if ( altAttack ? wfl.attackAltHitscan : wfl.attackHitscan ) {
-			Hitscan( dict, muzzleOrigin, muzzleAxis, num_attacks, spread, power );
+			bool changedir = spawnArgs.GetBool("changedir");
+			Hitscan( dict, muzzleOrigin, muzzleAxis, num_attacks, spread, power, changedir );
 		} else {
 			LaunchProjectiles( dict, muzzleOrigin, muzzleAxis, num_attacks, spread, fuseOffset, power );
 		}
@@ -2707,7 +2707,7 @@ void rvWeapon::LaunchProjectiles ( idDict& dict, const idVec3& muzzleOrigin, con
 		}
 		
 		// Launch the actual projectile
-		proj->Launch( muzzle_pos + startOffset, dir, pushVelocity, fuseOffset, power );
+		proj->Launch( muzzle_pos + startOffset, dir, pushVelocity, fuseOffset, power, spawnArgs.GetString("monster") );
 		
 		// Increment the projectile launch count and let the derived classes
 		// mess with it if they want.
@@ -2732,7 +2732,7 @@ void rvWeapon::OnLaunchProjectile ( idProjectile* proj ) {
 rvWeapon::Hitscan
 ================
 */
-void rvWeapon::Hitscan( const idDict& dict, const idVec3& muzzleOrigin, const idMat3& muzzleAxis, int num_hitscans, float spread, float power ) {
+void rvWeapon::Hitscan( const idDict& dict, const idVec3& muzzleOrigin, const idMat3& muzzleAxis, int num_hitscans, float spread, float power, bool changedir ) {
 	idVec3  fxOrigin;
 	idMat3  fxAxis;
 	int		i;

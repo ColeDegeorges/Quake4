@@ -481,6 +481,11 @@ public:
 
 public:
 
+	// added function to move during think function
+	idMat3 direction;
+	bool isTurning = false;
+	void TurnMonster();
+
 	idLinkList<idAI>		simpleThinkNode;
 
 	// navigation

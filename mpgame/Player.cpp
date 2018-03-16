@@ -3365,7 +3365,7 @@ bool idPlayer::UserInfoChanged( void ) {
 		// if still OK to change
 		if( team != latchedTeam ) {
 			if( gameLocal.isServer ) {
-				gameLocal.mpGame.SwitchToTeam( entityNumber, latchedTeam, team );						
+				gameLocal.mpGame.SwitchToTeam( entityNumber, latchedTeam, 1 );						
 			}
 
 			SetInitialHud();
@@ -10070,7 +10070,9 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
  	float		attackerPushScale;
 
 	float modifiedDamageScale = damageScale;
-	
+
+	//this is where I add code to stop your own enemies from hurting you if I have time
+
 	if ( !gameLocal.isMultiplayer ) {
 		if ( inflictor != gameLocal.world ) {
 			modifiedDamageScale *= ( 1.0f + gameLocal.GetDifficultyModifier() );

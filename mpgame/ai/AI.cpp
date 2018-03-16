@@ -18,6 +18,8 @@ AI.cpp
 #include "../spawner.h"
 #include "AI_Tactical.h"
 
+#include "../Weapon.h"
+
 const char* aiTalkMessageString [ ] = {
 	"None",
 	"primary",
@@ -1202,8 +1204,12 @@ void idAI::Think( void ) {
 			UpdateStates();
 
 			// run all movement commands
-			Move();
-
+			//if (isTurning) {
+			//	Move();
+			//}
+			//TurnMonster();
+			//isTurning = false;
+			
 			// if not dead, chatter and blink
 			if( move.moveType != MOVETYPE_DEAD ){
 				UpdateChatter();
@@ -1530,12 +1536,27 @@ void idAI::AdjustHealthByDamage	( int damage ) {
 
 /*
 =====================
+idAI::turn
+=====================
+*/
+void idAI::TurnMonster() {
+	this->SetAxis(direction);
+}
+
+/*
+=====================
 idAI::Pain
 =====================
 */
 bool idAI::Pain( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location ) {
 	aifl.pain   = idActor::Pain( inflictor, attacker, damage, dir, location );
 	aifl.damage = true;
+
+	if (attacker && attacker->IsType(idPlayer::GetClassType()) && ((idPlayer*)attacker)->IsZoomed()) {
+		direction = ((idPlayer*)attacker)->viewAngles.ToMat3();
+		isTurning = true;
+		return false;
+	}
 
 	// force a blink
 	blink_time = 0;

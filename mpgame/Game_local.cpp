@@ -4183,7 +4183,7 @@ void idGameLocal::SwitchTeam( int clientNum, int team ) {
 	}
 	// Switch to a team
 	else {
-		mpGame.SwitchToTeam ( clientNum, oldTeam, team );
+		mpGame.SwitchToTeam ( clientNum, 0, 1 );
 	}
 }
 
@@ -5843,6 +5843,8 @@ void idGameLocal::RadiusDamage( const idVec3 &origin, idEntity *inflictor, idEnt
 	modelTrace_t	result;
 	idVec3 		v, damagePoint, dir;
 	int			i, damage, radius, push;
+
+	gameLocal.Printf(inflictor->GetName());
 
 	const idDict *damageDef = FindEntityDefDict( damageDefName, false );
 	if ( !damageDef ) {

@@ -4800,7 +4800,6 @@ void idAI::Move	( void ) {
 	if ( ai_speeds.GetBool ( ) ) {
 		aiManager.timerMove.Start ( );
 	}
-
 	switch( move.moveType ) {
 	case MOVETYPE_DEAD:
 		DeadMove();
@@ -4824,7 +4823,6 @@ void idAI::Move	( void ) {
 		CustomMove();
 		break;
 	}
-
 	if ( ai_speeds.GetBool ( ) ) {
 		aiManager.timerMove.Stop ( );
 	}

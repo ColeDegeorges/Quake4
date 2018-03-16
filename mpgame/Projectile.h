@@ -29,7 +29,7 @@ public :
 	void					Restore( idRestoreGame *savefile );
 
 	void					Create( idEntity *owner, const idVec3 &start, const idVec3 &dir, idEntity* ignore = NULL, idEntity* extraPassEntity = NULL );
-	virtual void			Launch( const idVec3 &start, const idVec3 &dir, const idVec3 &pushVelocity, const float timeSinceFire = 0.0f, const float dmgPower = 1.0f );
+	virtual void			Launch( const idVec3 &start, const idVec3 &dir, const idVec3 &pushVelocity, const float timeSinceFire = 0.0f, const float dmgPower = 1.0f, idStr monst = "" );
 
 	virtual void			FreeLightDef( void );
 
@@ -64,7 +64,10 @@ public :
 	virtual void			ReadFromSnapshot( const idBitMsgDelta &msg );
 
 	virtual bool			ClientStale( void );
-	
+
+	// spawns monster
+	void				SpawnMonster();
+
 protected:
 	void					SpawnImpactEntities(const trace_t& collision, const idVec3 projectileDirection);
 
@@ -133,6 +136,8 @@ protected:
 	virtual void			PlayDetonateEffect	( const idVec3& origin, const idMat3& axis, bool forceImpact = false );
 
 private:
+	idStr monster;
+
 	void					DefaultDamageEffect	( const trace_t &collision, const idVec3 &velocity, const char *damageDefName );
 
 	void					Event_Explode			( void );

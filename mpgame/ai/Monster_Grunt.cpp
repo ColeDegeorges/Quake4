@@ -11,6 +11,10 @@ public:
 
 	rvMonsterGrunt ( void );
 	
+	// see if monster moves or not
+	//void setmove();
+	//bool checkmove(void);
+
 	void				Spawn					( void );
 	void				Save					( idSaveGame *savefile ) const;
 	void				Restore					( idRestoreGame *savefile );
@@ -62,6 +66,7 @@ rvMonsterGrunt::Spawn
 */
 void rvMonsterGrunt::Spawn ( void ) {
 	rageThreshold = spawnArgs.GetInt ( "health_rageThreshold" );
+
 
 	// Custom actions
 	actionMeleeMoveAttack.Init	( spawnArgs, "action_meleeMoveAttack",	NULL,				AIACTIONF_ATTACK );

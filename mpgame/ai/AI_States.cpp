@@ -1734,7 +1734,7 @@ bool idAI::UpdateTactical_r ( void ) {
 	} else if ( combat.tacticalMaskUpdate & AITACTICAL_PASSIVE_BIT ) { 
 		newTactical = AITACTICAL_PASSIVE;
 	}
-
+	
 	// Remove the new tactical from the available in case we have to recursively call ourself
 	combat.tacticalMaskUpdate &= ~(1<<newTactical);
 

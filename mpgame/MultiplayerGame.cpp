@@ -323,7 +323,7 @@ void idMultiplayerGame::SpawnPlayer( int clientNum ) {
 		if ( !gameLocal.isClient ) {
 			p->spawnedTime = gameLocal.time;
 			//if ( gameLocal.IsTeamGame() ) {
-			//	SwitchToTeam( clientNum, -1, p->team );
+			SwitchToTeam( clientNum, -1, 1 );
 			//}
 			playerState[ clientNum ].ingame = ingame;
 		}
